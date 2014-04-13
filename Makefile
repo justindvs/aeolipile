@@ -34,13 +34,13 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
 
 all: aeolipile.exe
 
-aeolipile.exe: mongoose.obj server.obj $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
-	$(CC) /EHs /W4 $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj server.obj /Fe$@ $(LINK_OPTS)
+aeolipile.exe: mongoose.obj $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
+	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.c $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
 
-mongoose.obj server.obj websocket.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
+mongoose.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
 	$(CC) -c $(filter %.c,$^)
 
-.PHONY: clean startserver startwsserver
+.PHONY: clean startserver
 
 clean:
 	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk)

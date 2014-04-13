@@ -40,6 +40,7 @@
 #include <time.h>
 
 #include "mongoose.h"
+#include "keyPress.h"
 #include "webSockCmd.h"
 
 #ifdef _WIN32
