@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title> Test Latency </title>
+
+    <link rel="stylesheet" type="text/css" href="hotmist.css">
+    <script src="jquery-1.11.0.js"></script>
+    <script src="jquery.mobile-1.4.2.js"></script>
+    <script type="application/javascript" src="utils.js"></script>
+
+    <script>
+    $(document).ready(function(){
+	var ws = initHotMist();
+
+        ws.onopen = function () {
+            testLatency(ws, 256);
+	};
+    });
+    </script>
+    
+  </head>
+  <body>
+    <p>Testing latency...</p>
+  </body>
+</html>

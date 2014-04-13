@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title> Mortal Kombat </title>
+
+    <link rel="stylesheet" type="text/css" href="hotmist.css">
+    <script src="jquery-1.11.0.js"></script>
+    <script src="jquery.mobile-1.4.2.js"></script>
+    <script type="application/javascript" src="utils.js"></script>
+
+    <script>
+    $(document).ready(function(){
+	var ws = initHotMist();
+
+	$('[data-seq]').touchstart(keySeqFn(ws))
+	               .mousedown(keySeqFn(ws));
+
+    });
+    </script>
+    
+  </head>
+  <body>
+
+    <img id="fatalityButton" data-seq="2;3;2;8;" src="mkImages/finishHim.png"></img>
+
+  </body>
+</html>

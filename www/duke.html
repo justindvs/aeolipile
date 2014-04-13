@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title> Duke Nukem 3D </title>
+
+    <link rel="stylesheet" type="text/css" href="hotmist.css">
+    <script src="jquery-1.11.0.js"></script>
+    <script src="jquery.mobile-1.4.2.js"></script>
+    <script type="application/javascript" src="utils.js"></script>
+
+    <script>
+    $(document).ready(function(){
+	var ws = initHotMist();
+
+	$('[data-key]').touchstart(keyDownFn(ws))
+	               .mousedown(keyDownFn(ws));
+	
+    });
+    </script>
+    
+  </head>
+  <body>
+
+    <p> hello </p>
+
+    <table id="gunTbl">
+      <tr>
+	<td><img class="dukeGun" id="dukeGun1" data-key="1" src="dukeImages/pistolIcon.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun2" data-key="2" src="dukeImages/shotgunIcon.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun3" data-key="3" src="dukeImages/chaingunIcon.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun4" data-key="4" src="dukeImages/rpgIcon.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun5" data-key="5" src="dukeImages/devastatorIcon.png"></img></td>
+      </tr>
+      <tr>
+	<td><img class="dukeGun" id="dukeGun6" data-key="6" src="crappyGun.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun7" data-key="7" src="crappyGun.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun8" data-key="8" src="crappyGun.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun9" data-key="9" src="crappyGun.png"></img></td>
+	<td><img class="dukeGun" id="dukeGun0" data-key="0" src="dukeImages/mightybootIcon.png"></img></td>
+      </tr>
+    </table>
+
+  </body>
+</html>
