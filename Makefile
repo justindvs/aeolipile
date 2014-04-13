@@ -4,7 +4,6 @@ CC = cl $(CC_OPTS)
 WINDOWS_SDK_DIR := C:/Program Files (x86)/Windows Kits/8.0
 VC_DIR := C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC
 MONGOOSE_SRC_DIR := $(SRC_DIR)/mongoose
-LUA_SRC_DIR := $(SRC_DIR)/lua-5.1.5/src
 KEYPRESS_SRC_DIR := $(SRC_DIR)/keyPressLib
 WEBSOCKCMD_DIR := $(SRC_DIR)/webSockCmd
 
@@ -18,7 +17,6 @@ CC_OPTS := /I "$(VC_DIR)/include" \
            /I "$(WINDOWS_SDK_DIR)/Include/um" \
            /I "$(WINDOWS_SDK_DIR)/Include/shared" \
            /I "$(MONGOOSE_SRC_DIR)" \
-           /I "$(LUA_SRC_DIR)" \
            /I "$(KEYPRESS_SRC_DIR)" \
            /I "$(WEBSOCKCMD_DIR)" \
            /I "$(SRC_DIR)" \
@@ -34,18 +32,13 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
                    "$(VC_LIB_DIR)/libcmt.lib" \
                    "$(VC_LIB_DIR)/oldnames.lib"
 
-LUA_DEFINES := /DLUA_BUILD_AS_DLL
+all: aeolipile.exe
 
-all: hotmist.exe
-
-hotmist.exe: mongoose.obj server.obj lua.dll $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
-	$(CC) /EHs /W4 $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj server.obj /Fe$@ $(LINK_OPTS) lua.lib
+aeolipile.exe: mongoose.obj server.obj $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
+	$(CC) /EHs /W4 $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj server.obj /Fe$@ $(LINK_OPTS)
 
 mongoose.obj server.obj websocket.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
-	$(CC) /DMONGOOSE_USE_LUA /DMONGOOSE_POST_SIZE_LIMIT=1024 -c $(filter %.c,$^)
-
-lua.dll: $(filter-out %/lua.c,$(wildcard $(SRC_DIR)/lua-5.1.5/src/*))
-	$(CC) /LD $(LUA_DEFINES) $(filter %.c,$^) /Fe$@ $(LINK_OPTS)
+	$(CC) -c $(filter %.c,$^)
 
 .PHONY: clean startserver startwsserver
 
@@ -53,4 +46,4 @@ clean:
 	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk)
 
 startserver:
-	cmd /c start hotmist.exe
+	cmd /c start aeolipile.exe

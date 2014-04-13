@@ -2,14 +2,14 @@
   <head>
     <title> Test Latency </title>
 
-    <link rel="stylesheet" type="text/css" href="hotmist.css">
+    <link rel="stylesheet" type="text/css" href="aeolipile.css">
     <script src="jquery-1.11.0.js"></script>
     <script src="jquery.mobile-1.4.2.js"></script>
     <script type="application/javascript" src="utils.js"></script>
 
     <script>
     $(document).ready(function(){
-	var ws = initHotMist();
+	var ws = initAeolipile();
 
         ws.onopen = function () {
             testLatency(ws, 256);

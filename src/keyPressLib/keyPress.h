@@ -1,7 +1,6 @@
 #ifndef KEYPRESS_H__
 #define KEYPRESS_H__
 
-#include <lua.h>
 #include <utils.h>
 
 HM_EXTERN_C void keyDown(const char* key);

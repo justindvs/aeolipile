@@ -17,7 +17,7 @@ function keySeqFn(ws) {
    };
 }
 
-function initHotMist() {
+function initAeolipile() {
    var ws = new WebSocket('ws://' + location.hostname + ':8080/ws');
    ws.onopen = function () {
       console.log('WS_STATE: open');
