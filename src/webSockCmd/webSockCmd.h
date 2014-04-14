@@ -7,6 +7,6 @@
 
 struct mg_connection;
 
-HM_EXTERN_C void processCmd(struct mg_connection* conn, char* cmd);
+HM_EXTERN_C void processCmd(struct mg_connection* conn, char* cmd, size_t cmdLen);
 
 #endif

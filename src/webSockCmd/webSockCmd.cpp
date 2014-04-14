@@ -41,8 +41,14 @@ char* nextToken(char* cmd)
   return cmd;
 }
 
-void processCmd(mg_connection* conn, char* cmd)
+void processCmd(mg_connection* conn, char* cmd, size_t cmdLen)
 {
+   // Null-terminate the command and add END_OF_BUF_CHAR to the end of
+   // the cmd buffer.  This makes it easier to parse the command
+   // piece-meal.
+   cmd[cmdLen] = '\0';
+   cmd[cmdLen+1] = END_OF_BUF_CHAR;
+
   // keydown J
   // keyup J
   char* cmdName;

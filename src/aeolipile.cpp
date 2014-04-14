@@ -1,40 +1,19 @@
-#undef UNICODE                    // Use ANSI WinAPI functions
-#undef _UNICODE                   // Use multibyte encoding on Windows
-#define _MBCS                     // Use multibyte encoding on Windows
-#define _WIN32_WINNT 0x500        // Enable MIIM_BITMAP
-#define _CRT_SECURE_NO_WARNINGS   // Disable deprecation warning in VS2005
-#define _XOPEN_SOURCE 600         // For PATH_MAX on linux
-#undef WIN32_LEAN_AND_MEAN        // Let windows.h always include winsock2.h
+// Windows complains about CRT functions being deprecated
+#define _CRT_SECURE_NO_WARNINGS
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
-#include <errno.h>
-#include <limits.h>
-#include <stddef.h>
-#include <stdarg.h>
-#include <ctype.h>
-#include <time.h>
 
+// Windows stuff
+#include <windows.h>
+#include <direct.h> // _chdir, _getcwd
+
+// Aeolipile stuff
 #include <mongoose.h>
 #include <keyPress.h>
 #include <webSockCmd.h>
-
-#include <windows.h>
-#include <direct.h>  // For chdir()
-#include <winsvc.h>
-#include <shlobj.h>
-
-#ifndef PATH_MAX
-   #define PATH_MAX MAX_PATH
-#endif
-
-#ifndef S_ISDIR
-   #define S_ISDIR(x) ((x) & _S_IFDIR)
-#endif
 
 #define DIRSEP '\\'
 #define snprintf _snprintf
@@ -42,21 +21,21 @@
 #define chdir _chdir
 #define abs_path(rel, abs, abs_size) _fullpath((abs), (rel), (abs_size))
 
-static int serverExiting;
+int serverExiting;
 
-static mg_server* server;
-static mg_server* server_ws;
+mg_server* server;
+mg_server* webSocketServer;
 
-static const char* defaultDocRoot = "./www";
-static const char* defaultPort = "1979";
+const char* docRoot = "./www";
+const char* webServerPort = "1979";
 
-static void __cdecl signal_handler(int sig_num) {
-   signal(sig_num, signal_handler);
+void __cdecl signalHandler(int sig_num) {
+   signal(sig_num, signalHandler);
    serverExiting = 1;
 }
 
 static void setDocRoot(mg_server* server, const char *path_to_mongoose_exe) {
-   char path[PATH_MAX], abs[PATH_MAX];
+   char path[MAX_PATH], abs[MAX_PATH];
    const char *p;
 
    p = strrchr(path_to_mongoose_exe, DIRSEP);
@@ -65,11 +44,11 @@ static void setDocRoot(mg_server* server, const char *path_to_mongoose_exe) {
    }
    else {
       snprintf(path, sizeof(path), "%.*s", (int) (p - path_to_mongoose_exe),
-		  path_to_mongoose_exe);
+	       path_to_mongoose_exe);
    }
 
    strncat(path, "/", sizeof(path) - 1);
-   strncat(path, defaultDocRoot, sizeof(path) - 1);
+   strncat(path, docRoot, sizeof(path) - 1);
 
    // Absolutize the path, and set the option
    abs_path(path, abs, sizeof(abs));
@@ -79,7 +58,7 @@ static void setDocRoot(mg_server* server, const char *path_to_mongoose_exe) {
 static int send_reply(mg_connection *conn) {
    char buffer[256];
    char firstChar;
-  
+   
    if (conn->is_websocket) {
       if (conn->content_len == 0) {
 	 return MG_TRUE;
@@ -91,7 +70,6 @@ static int send_reply(mg_connection *conn) {
       }
 
       firstChar = conn->content[0];
-
       if ((firstChar < 0x20) || (firstChar > 0x7E)) {
 	 // Weird char, probably not a normal request
 	 return MG_TRUE;
@@ -99,10 +77,8 @@ static int send_reply(mg_connection *conn) {
 
       // Null terminate cmd
       memcpy(buffer, conn->content, conn->content_len);
-      buffer[conn->content_len] = '\0';
-      buffer[conn->content_len+1] = END_OF_BUF_CHAR;
 
-      processCmd(conn, buffer);
+      processCmd(conn, buffer, conn->content_len);
       return MG_TRUE;
    }
    else {
@@ -110,7 +86,7 @@ static int send_reply(mg_connection *conn) {
    }
 }
 
-static int ev_handler(mg_connection *conn, enum mg_event ev) {
+static int webSocketEventHandler(mg_connection *conn, enum mg_event ev) {
   if (ev == MG_REQUEST) {
     return send_reply(conn);
   }
@@ -120,73 +96,98 @@ static int ev_handler(mg_connection *conn, enum mg_event ev) {
   return MG_FALSE;
 }
 
-static void start_mongoose(int /*argc*/, char *argv[]) {
+static void start_mongoose(const char* serverBin) {
    server = mg_create_server(NULL, NULL);
    if (!server) {
       fprintf(stderr, "Failed to start Aeolipile\n");
       exit(1);
    }
 
-   setDocRoot(server, argv[0]);
-   mg_set_option(server, "listening_port", defaultPort);
+   setDocRoot(server, serverBin);
+   mg_set_option(server, "listening_port", webServerPort);
 
-   // Change current working directory to document root. This way,
-   // scripts can use relative paths.
    chdir(mg_get_option(server, "document_root"));
 }
 
 static void start_mongoose_ws() {
-   server_ws = mg_create_server(NULL, ev_handler);
-   if (!server_ws) {
+   webSocketServer = mg_create_server(NULL, webSocketEventHandler);
+   if (!webSocketServer) {
       fprintf(stderr, "Failed to start WebSocket server\n");
       exit(1);
    }
-   mg_set_option(server_ws, "listening_port", "8080");
+   // TODO: Allow use of a different web socket port
+   mg_set_option(webSocketServer, "listening_port", "8080");
 }
 
-int wsExit;
-
-DWORD wsThreadMain(void* /*param*/) {
-  while (!wsExit) {
-    mg_poll_server(server_ws, 500);
+DWORD websockThreadMain(void* /*param*/) {
+  while (!serverExiting) {
+    mg_poll_server(webSocketServer, 500);
   }
   return 0;
 }
 
-int main(int argc, char *argv[]) {
+void printUsageAndExit() {
+   puts("USAGE: aeolipile [options]");
+   puts("  options:");
+   puts("    --help|-h         Print this message");
+   puts("    --port|-p PORT    Set the web server port (defaults to 1979)");
+   exit(1);
+}
 
-   signal(SIGTERM, signal_handler);
-   signal(SIGINT, signal_handler);
+void processArgs(char* argv[]) {
+   // TODO: Use a proper argument parsing library (like getopt)
+   char** currentArg = &argv[1];
+
+   while (*currentArg) {
+      if ((strcmp("--help", *currentArg) == 0) ||
+	  (strcmp("-h", *currentArg) == 0)) {
+	 printUsageAndExit();
+      }
+      else if ((strcmp("--port", *currentArg) == 0) ||
+	       (strcmp("-p", *currentArg) == 0)) {
+	 // Make sure an argument was supplied
+	 ++currentArg;
+	 if (!*currentArg) printUsageAndExit();
+	 webServerPort = *currentArg;
+      }
+      ++currentArg;
+   }
+}
+
+int main(int /*argc*/, char *argv[]) {
+   processArgs(argv);
    
-   HANDLE wsThread;
-   wsExit = 0;
+   // Setup signal handlers so the server can be cleanly killed with a ctrl-c.
+   // TODO: Do we need to handle both of these signals?
+   signal(SIGTERM, signalHandler);
+   signal(SIGINT, signalHandler);
+   
+   HANDLE websockThread;
    serverExiting = 0;
   
    keypress::globalInit();
 
-   start_mongoose(argc, argv);
+   start_mongoose(argv[0]);
    start_mongoose_ws();
 
    printf("Aeolipile serving [%s] on port %s\n",
 	  mg_get_option(server, "document_root"),
 	  mg_get_option(server, "listening_port"));
   
-   wsThread = CreateThread(NULL, 0, wsThreadMain, NULL, 0, NULL);
+   websockThread = CreateThread(NULL, 0, websockThreadMain, NULL, 0, NULL);
 
    while (!serverExiting) {
       mg_poll_server(server, 500);
    }
+
    printf("Exiting...");
 
    mg_destroy_server(&server);
+   WaitForSingleObject(websockThread, INFINITE);  
+   mg_destroy_server(&webSocketServer);
 
-   wsExit = 1;
-   WaitForSingleObject(wsThread, INFINITE);  
-  
-   mg_destroy_server(&server_ws);
    puts(" done.");
 
    keypress::globalDestroy();
-
-   return EXIT_SUCCESS;
+   return 0;
 }
