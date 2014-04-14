@@ -4,11 +4,13 @@
 #include <stdint.h>
 #include <vector>
 
-using namespace std;
-
 #pragma warning(disable:4127) // conditional expression is constant
 
 #define MAX_TIMERS 64
+
+namespace keypress
+{
+using namespace std;
 
 enum KeyDir
 {
@@ -210,3 +212,5 @@ void globalDestroy()
     CloseThreadpoolTimer(timers[x].timer);
   }
 }
+
+} // namespace keypress

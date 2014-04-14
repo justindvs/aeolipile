@@ -58,22 +58,22 @@ void processCmd(mg_connection* conn, char* cmd)
   else if (strcmp("keydown", cmdName) == 0)
   {
     keyName = nextToken(cmd);
-    keyDown(keyName);    
+    keypress::keyDown(keyName);    
   }
   else if (strcmp("keyup", cmdName) == 0)
   {
     keyName = nextToken(cmd);
-    keyUp(keyName);
+    keypress::keyUp(keyName);
   }
   else if (strcmp("keydownup", cmdName) == 0)
   {
     keyName = nextToken(cmd);
-    keyDownUp(keyName);
+    keypress::keyDownUp(keyName);
   }
   else if (strcmp("keyseq", cmdName) == 0)
   {
     keyName = nextToken(cmd);
-    keySequence(keyName);
+    keypress::keySequence(keyName);
   }
   else
   {

@@ -1,14 +1,17 @@
 #ifndef KEYPRESS_H__
 #define KEYPRESS_H__
 
-#include <utils.h>
+namespace keypress
+{
 
-HM_EXTERN_C void keyDown(const char* key);
-HM_EXTERN_C void keyUp(const char* key);
-HM_EXTERN_C void keyDownUp(const char* key);
-HM_EXTERN_C void keySequence(const char* seq);
+void keyDown(const char* key);
+void keyUp(const char* key);
+void keyDownUp(const char* key);
+void keySequence(const char* seq);
 
-HM_EXTERN_C void globalInit();
-HM_EXTERN_C void globalDestroy();
+void globalInit();
+void globalDestroy();
+
+}
 
 #endif
