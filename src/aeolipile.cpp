@@ -16,6 +16,7 @@
 #include <webSockCmd.h>
 
 #define DIRSEP '\\'
+// sigh...windows likes to make things difficult
 #define snprintf _snprintf
 #define getcwd _getcwd
 #define chdir _chdir
@@ -78,7 +79,7 @@ static int send_reply(mg_connection *conn) {
       // Null terminate cmd
       memcpy(buffer, conn->content, conn->content_len);
 
-      processCmd(conn, buffer, conn->content_len);
+      wscmd::processCmd(conn, buffer, conn->content_len);
       return MG_TRUE;
    }
    else {

@@ -1,3 +1,5 @@
+// This file defines the mapping between key names and virtual key
+// codes (for SendInput)
 KEYNAME_MAPPING("left"        , VK_LEFT)
 KEYNAME_MAPPING("right"	      , VK_RIGHT)
 KEYNAME_MAPPING("up"	      , VK_UP)
