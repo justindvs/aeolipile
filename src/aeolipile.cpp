@@ -13,7 +13,7 @@
 // Aeolipile stuff
 #include <mongoose.h>
 #include <keyPress.h>
-#include <webSockCmd.h>
+#include <wscmd.h>
 
 #define DIRSEP '\\'
 // sigh...windows likes to make things difficult
