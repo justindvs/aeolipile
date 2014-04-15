@@ -4,7 +4,7 @@ CC = cl $(CC_OPTS)
 WINDOWS_SDK_DIR := C:/Program Files (x86)/Windows Kits/8.0
 VC_DIR := C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC
 MONGOOSE_SRC_DIR := $(SRC_DIR)/mongoose
-KEYPRESS_SRC_DIR := $(SRC_DIR)/keyPressLib
+KEYPRESS_SRC_DIR := $(SRC_DIR)/keypress
 WSCMD_DIR := $(SRC_DIR)/wscmd
 WEB_DIR := www
 
