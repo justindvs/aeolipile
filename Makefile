@@ -6,6 +6,7 @@ VC_DIR := C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC
 MONGOOSE_SRC_DIR := $(SRC_DIR)/mongoose
 KEYPRESS_SRC_DIR := $(SRC_DIR)/keyPressLib
 WEBSOCKCMD_DIR := $(SRC_DIR)/webSockCmd
+WEB_DIR := www
 
 ifneq (,$(SPEED))
    ADDL_CC_OPTS := /O2
@@ -32,7 +33,7 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
                    "$(VC_LIB_DIR)/libcmt.lib" \
                    "$(VC_LIB_DIR)/oldnames.lib"
 
-all: aeolipile.exe
+all: aeolipile.exe $(WEB_DIR)/aeolipile.js
 
 aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
 	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
@@ -40,10 +41,17 @@ aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPres
 mongoose.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
 	$(CC) -c $(filter %.c,$^)
 
+$(WEB_DIR)/aeolipile.js: $(WEB_DIR)/utils.js $(WEB_DIR)/jquery-1.11.0.js $(WEB_DIR)/jquery.mobile-1.4.2.js
+	@echo Generating $(notdir $@)
+	@echo // Generated file.  Do not modify! > $@
+	@echo // This file is just the concatenation of these files: $(notdir $^) >> $@
+	@echo // The intention of this is to make it easier to pull this stuff in in web pages >> $@
+	@cat $^ >> $@
+
 .PHONY: clean startserver
 
 clean:
-	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk)
+	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk) $(WEB_DIR)/aeolipile.js
 
 startserver:
 	cmd /c start aeolipile.exe

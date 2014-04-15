@@ -1,26 +1,21 @@
 <html>
   <head>
-    <title> Mortal Kombat </title>
-
-    <link rel="stylesheet" type="text/css" href="aeolipile.css">
-    <script src="jquery-1.11.0.js"></script>
-    <script src="jquery.mobile-1.4.2.js"></script>
-    <script type="application/javascript" src="utils.js"></script>
-
+    <title>Mortal Kombat</title>
+    <script src="aeolipile.js"></script>
+    <style>
+      body { background-color: #000000; }
+    </style>
     <script>
     $(document).ready(function(){
 	var ws = initAeolipile();
 
 	$('[data-seq]').touchstart(keySeqFn(ws))
 	               .mousedown(keySeqFn(ws));
-
     });
     </script>
     
   </head>
   <body>
-
-    <img id="fatalityButton" data-seq="2;3;2;8;" src="mkImages/finishHim.png"></img>
-
+    <img data-seq="2;3;2;8;" src="mkImages/finishHim.png"></img>
   </body>
 </html>

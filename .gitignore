@@ -3,3 +3,6 @@
 *.ilk
 *.obj
 *.pdb
+
+# aeolipile.js is generated at build time
+www/aeolipile.js
