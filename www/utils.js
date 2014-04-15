@@ -3,17 +3,27 @@ function sendCmd(ws, cmdStr) {
    ws.send(cmdStr);
 }
 
+function preventDoubleEvent(e) {
+   // Some mobile browsers send both the touch and click events.  We
+   // don't want both to be triggered, so stop event propagation to
+   // prevent this.
+   e.stopPropagation();
+   e.preventDefault();
+}
+
 function keyDownFn(ws) {
-   return function() {
+   return function(e) {
       var thisKey = $(this).data('key');
       sendCmd(ws, 'keydownup ' + thisKey);
+      preventDoubleEvent(e);
    };
 }
 
 function keySeqFn(ws) {
-   return function() {
+   return function(e) {
       var sequence = $(this).data('seq');
       sendCmd(ws, 'keyseq ' + sequence);
+      preventDoubleEvent(e);
    };
 }
 
@@ -37,9 +47,12 @@ function initAeolipile() {
       }
    };
 
+   // Setting both touchstart and mousedown event handlers.  This is
+   // because I want this to work on both mobile and non-mobile
+   // platforms.  If nothing else, it's nice to be able to test on
+   // non-mobile platforms with clicking.
    $('[data-key]').touchstart(keyDownFn(ws))
                   .mousedown(keyDownFn(ws));
-
    $('[data-seq]').touchstart(keySeqFn(ws))
                   .mousedown(keySeqFn(ws));
    
