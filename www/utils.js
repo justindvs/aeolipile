@@ -36,5 +36,12 @@ function initAeolipile() {
          console.log('WS_STATE: RECV DATA: ' + ev.data);
       }
    };
+
+   $('[data-key]').touchstart(keyDownFn(ws))
+                  .mousedown(keyDownFn(ws));
+
+   $('[data-seq]').touchstart(keySeqFn(ws))
+                  .mousedown(keySeqFn(ws));
+   
    return ws;
 }
