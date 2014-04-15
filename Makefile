@@ -35,8 +35,8 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
 
 all: aeolipile.exe $(WEB_DIR)/aeolipile.js
 
-aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WSCMD_DIR)/wscmd.cpp
-	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WSCMD_DIR)/wscmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
+aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp
+	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
 
 mongoose.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
 	$(CC) -c $(filter %.c,$^)
