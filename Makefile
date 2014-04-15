@@ -5,7 +5,7 @@ WINDOWS_SDK_DIR := C:/Program Files (x86)/Windows Kits/8.0
 VC_DIR := C:/Program Files (x86)/Microsoft Visual Studio 11.0/VC
 MONGOOSE_SRC_DIR := $(SRC_DIR)/mongoose
 KEYPRESS_SRC_DIR := $(SRC_DIR)/keyPressLib
-WEBSOCKCMD_DIR := $(SRC_DIR)/webSockCmd
+WSCMD_DIR := $(SRC_DIR)/wscmd
 WEB_DIR := www
 
 ifneq (,$(SPEED))
@@ -19,7 +19,7 @@ CC_OPTS := /I "$(VC_DIR)/include" \
            /I "$(WINDOWS_SDK_DIR)/Include/shared" \
            /I "$(MONGOOSE_SRC_DIR)" \
            /I "$(KEYPRESS_SRC_DIR)" \
-           /I "$(WEBSOCKCMD_DIR)" \
+           /I "$(WSCMD_DIR)" \
            /I "$(SRC_DIR)" \
            $(ADDL_CC_OPTS)
 
@@ -35,8 +35,8 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
 
 all: aeolipile.exe $(WEB_DIR)/aeolipile.js
 
-aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp
-	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WEBSOCKCMD_DIR)/webSockCmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
+aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WSCMD_DIR)/webSockCmd.cpp
+	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keyPress.cpp $(WSCMD_DIR)/webSockCmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
 
 mongoose.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
 	$(CC) -c $(filter %.c,$^)
