@@ -1,4 +1,4 @@
-#include "keyPress.h"
+#include "keypress.h"
 #include <iostream>
 #include <windows.h>
 #include <stdint.h>
@@ -96,7 +96,7 @@ int keyNameToCode(const char* key) {
          else if (strcmp(nameStr, key) == 0) { thisKey = code; }
 
       if (false) {}
-      #include "keyNames.def"
+      #include "keynames.def"
    }
    return thisKey;
 }
