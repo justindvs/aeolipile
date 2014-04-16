@@ -2,17 +2,19 @@
   <head>
     <title>Mortal Kombat</title>
     <script src="/pyroscaphe.js"></script>
+    <script> $(document).ready(function(){ initPyroscaphe(); }); </script>
     <style>
       body { background-color: #000000; }
+      #finishHim {
+         width: 95%;
+         height: auto;
+         margin: auto;
+         position: absolute;
+         top: 0; left: 0; bottom: 0; right: 0;
+      }
     </style>
-    <script>
-    $(document).ready(function(){
-	initPyroscaphe();
-    });
-    </script>
-    
   </head>
   <body>
-    <img data-seq="2;3;2;8;" src="finishHim.png"></img>
+    <img id="finishHim" data-seq="2;3;2;8;" src="finishHim.png"></img>
   </body>
 </html>
