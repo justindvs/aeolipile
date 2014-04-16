@@ -27,7 +27,7 @@ function keySeqFn(ws) {
    };
 }
 
-function initAeolipile() {
+function initPyroscaphe() {
    var ws = new WebSocket('ws://' + location.hostname + ':8080/ws');
    ws.onopen = function () {
       console.log('WS_STATE: open');

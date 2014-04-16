@@ -4,5 +4,5 @@
 *.obj
 *.pdb
 
-# aeolipile.js is generated at build time
-www/aeolipile.js
+# pyroscaphe.js is generated at build time
+www/pyroscaphe.js

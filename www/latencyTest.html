@@ -2,12 +2,12 @@
   <head>
     <title> Test Latency </title>
 
-    <script src="aeolipile.js"></script>
+    <script src="pyroscaphe.js"></script>
     <script src="debugtools.js"></script>
 
     <script>
     $(document).ready(function(){
-	var ws = initAeolipile();
+	var ws = initPyroscaphe();
 
         ws.onopen = function () {
             testLatency(ws, 256);

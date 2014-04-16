@@ -10,7 +10,7 @@
 #include <windows.h>
 #include <direct.h> // _chdir, _getcwd
 
-// Aeolipile stuff
+// pyroscaphe stuff
 #include <mongoose.h>
 #include <keyPress.h>
 #include <wscmd.h>
@@ -100,7 +100,7 @@ static int webSocketEventHandler(mg_connection *conn, enum mg_event ev) {
 static void start_mongoose(const char* serverBin) {
    server = mg_create_server(NULL, NULL);
    if (!server) {
-      fprintf(stderr, "Failed to start Aeolipile\n");
+      fprintf(stderr, "Failed to start Pyroscaphe\n");
       exit(1);
    }
 
@@ -128,7 +128,7 @@ DWORD websockThreadMain(void* /*param*/) {
 }
 
 void printUsageAndExit() {
-   puts("USAGE: aeolipile [options]");
+   puts("USAGE: pyroscaphe [options]");
    puts("  options:");
    puts("    --help|-h         Print this message");
    puts("    --port|-p PORT    Set the web server port (defaults to 1979)");
@@ -171,7 +171,7 @@ int main(int /*argc*/, char *argv[]) {
    start_mongoose(argv[0]);
    start_mongoose_ws();
 
-   printf("Aeolipile serving [%s] on port %s\n",
+   printf("Pyroscaphe serving [%s] on port %s\n",
 	  mg_get_option(server, "document_root"),
 	  mg_get_option(server, "listening_port"));
   

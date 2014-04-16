@@ -33,15 +33,15 @@ LINK_OPTS := /link "$(WINDOWS_SDK_LIB_DIR)/WS2_32.Lib" \
                    "$(VC_LIB_DIR)/libcmt.lib" \
                    "$(VC_LIB_DIR)/oldnames.lib"
 
-all: aeolipile.exe $(WEB_DIR)/aeolipile.js
+all: pyroscaphe.exe $(WEB_DIR)/pyroscaphe.js
 
-aeolipile.exe: mongoose.obj $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp
-	$(CC) /EHs /W4 $(SRC_DIR)/aeolipile.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
+pyroscaphe.exe: mongoose.obj $(SRC_DIR)/pyroscaphe.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp
+	$(CC) /EHs /W4 $(SRC_DIR)/pyroscaphe.cpp $(KEYPRESS_SRC_DIR)/keypress.cpp $(WSCMD_DIR)/wscmd.cpp mongoose.obj /Fe$@ $(LINK_OPTS)
 
 mongoose.obj: $(wildcard $(MONGOOSE_SRC_DIR)/*)
 	$(CC) -c $(filter %.c,$^)
 
-$(WEB_DIR)/aeolipile.js: $(WEB_DIR)/utils.js $(WEB_DIR)/jquery-1.11.0.js $(WEB_DIR)/jquery.mobile-1.4.2.js
+$(WEB_DIR)/pyroscaphe.js: $(WEB_DIR)/utils.js $(WEB_DIR)/jquery-1.11.0.js $(WEB_DIR)/jquery.mobile-1.4.2.js
 	@echo Generating $(notdir $@)
 	@echo // Generated file.  Do not modify! > $@
 	@echo // This file is just the concatenation of these files: $(notdir $^) >> $@
@@ -51,7 +51,7 @@ $(WEB_DIR)/aeolipile.js: $(WEB_DIR)/utils.js $(WEB_DIR)/jquery-1.11.0.js $(WEB_D
 .PHONY: clean startserver
 
 clean:
-	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk) $(WEB_DIR)/aeolipile.js
+	rm -f $(wildcard *.obj) $(wildcard *.lib) $(wildcard *.dll) $(wildcard *.exe) $(wildcard *.exp) $(wildcard *.pdb) $(wildcard *.ilk) $(WEB_DIR)/pyroscaphe.js
 
 startserver:
-	cmd /c start aeolipile.exe
+	cmd /c start pyroscaphe.exe
