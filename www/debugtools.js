@@ -24,7 +24,7 @@ function reportResults(times) {
 
    resultStr += '<h1>Results</h1>';
    resultStr += '<pre>';
-   resultStr += 'The following are round-trip numbers so the actual latency is roughly half of these times.<br>';
+   resultStr += 'The following are round-trip numbers so the actual latency is roughly half.<br>';
    resultStr += '<br>Num Iterations: ' + times.length;
    resultStr += '<br>First call:     ' + times[0] + ' ms';
 
