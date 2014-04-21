@@ -4,5 +4,8 @@
 *.obj
 *.pdb
 
+# config.mak is intended to be customized based on the build machine
+config.mak
+
 # pyroscaphe.js is generated at build time
 www/pyroscaphe.js
