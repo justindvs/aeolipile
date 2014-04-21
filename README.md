@@ -9,10 +9,10 @@ For a better introduction to Pyroscaphe, see my blog post here: TODO_LINK!!
 In order to build Pyroscaphe, you'll need several tools installed on your machine
 * Visual C++ (the free "Express" version works fine)
 * A few Cygwin tools (these must be in your PATH)
-** GNU Make
-** cat
-** rm
-** echo
+   * GNU Make
+   * cat
+   * rm
+   * echo
 
 The build process also assumes that you have the Visual Studio tools in your PATH.  The easiest way to do this is to run the build from a "Visual Studio Command Prompt" (can usually be found @ Start->All Programs->Microsoft Visual Studio XXXX->Visual Studio Tools).
 
