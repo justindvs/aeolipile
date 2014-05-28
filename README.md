@@ -2,7 +2,7 @@
 
 Pyroscaphe is a combination of a web server + some javascript tools to enable the creation of touch screen UIs for PC games.
 
-For a better introduction to Pyroscaphe, see my blog post here: http://jmdavisblog.blogspot.com/2014/04/pyroscaphe.html
+For a better introduction to Pyroscaphe, see my blog post: http://jmdavisblog.blogspot.com/2014/04/pyroscaphe.html
 
 ## How to Build
 
